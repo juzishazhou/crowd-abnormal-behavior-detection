@@ -68,6 +68,7 @@ crowd-abnormal-behavior-detection/
 ├── requirements.txt
 ├── .gitignore
 ├── CITATION.cff
+├── _common.py                       # Shared utilities (video I/O, keyframe extraction, etc.)
 ├── scripts/                         # Core detection scripts
 │   ├── fall_detection.py            # Fall detection
 │   ├── running_detection.py         # Running detection
@@ -86,7 +87,9 @@ crowd-abnormal-behavior-detection/
 │   ├── measure_tracking.py          # Tracking performance benchmark
 │   └── run_eval.py                  # Model evaluation
 ├── docs/                            # Documentation
-│   └── USAGE.md                     # Detailed usage guide
+│   ├── USAGE.md                     # Detailed usage guide
+│   ├── test_report.md               # Environment verification report
+│   └── refactor_report.md           # Code quality refactoring report
 ├── assets/                          # Static assets
 │   ├── fall.mp4                     # Fall detection sample video
 │   ├── running.mp4                  # Running detection sample video
@@ -96,6 +99,7 @@ crowd-abnormal-behavior-detection/
 │       ├── running_demo.gif
 │       └── intrusion_demo.gif
 └── outputs/                         # Local outputs (gitignored)
+    └── .gitkeep                     # Placeholder to keep directory visible
 ```
 
 ---
@@ -114,13 +118,13 @@ pip install -r requirements.txt
 
 | Package | Purpose |
 |---|---|
-| `ultralytics>=8.4.0` | YOLO inference + tracking |
-| `opencv-python>=4.6.0` | Video I/O + visualization |
-| `numpy>=1.23.0` | Numerical operations |
-| `torch>=1.8.0` | PyTorch backend |
-| `shapely>=2.0.0` | Precise polygon ops (optional; intrusion detection has fallback) |
-| `psutil>=5.8.0` | System info checks |
-| `matplotlib>=3.3.0` | Figure plotting |
+| `ultralytics>=8.4.65` | YOLO inference + tracking |
+| `opencv-python>=4.13.0` | Video I/O + visualization |
+| `numpy>=2.4.4` | Numerical operations |
+| `torch>=2.12.0` | PyTorch backend |
+| `shapely>=2.1.2` | Precise polygon ops (optional; intrusion detection has fallback) |
+| `psutil>=7.2.2` | System info checks |
+| `matplotlib>=3.10.9` | Figure plotting |
 
 ---
 
@@ -210,9 +214,10 @@ See [docs/USAGE.md](docs/USAGE.md) for full parameter details.
 ## Notes
 
 1. **Not included**: datasets, weight files (.pt), training results
-2. Provide your own input videos via `--source` if not using the sample videos in `assets/`
-3. Forbidden zone coordinates should be calibrated via `tools/zone_selector.py` for your specific video resolution
-4. Place weight files in `weights/` to use them (this directory is gitignored)
+2. Sample videos for quick testing are already provided in `assets/`. Use them via `--source assets/fall.mp4` etc.
+3. Provide your own input videos via `--source` when testing with custom footage
+4. Forbidden zone coordinates should be calibrated via `tools/zone_selector.py` for your specific video resolution
+5. Place weight files in `weights/` to use them (this directory is gitignored)
 
 ---
 

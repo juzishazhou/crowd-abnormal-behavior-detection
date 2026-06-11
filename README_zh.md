@@ -68,6 +68,7 @@ crowd-abnormal-behavior-detection/
 ├── requirements.txt
 ├── .gitignore
 ├── CITATION.cff
+├── _common.py                       # 共享工具模块 (视频 I/O、关键帧抽取等)
 ├── scripts/                         # 核心检测脚本
 │   ├── fall_detection.py            # 跌倒检测
 │   ├── running_detection.py         # 奔跑检测
@@ -86,7 +87,9 @@ crowd-abnormal-behavior-detection/
 │   ├── measure_tracking.py          # 跟踪性能测量
 │   └── run_eval.py                  # 模型评估
 ├── docs/                            # 文档
-│   └── USAGE.md                     # 详细使用说明
+│   ├── USAGE.md                     # 详细使用说明
+│   ├── test_report.md               # 环境验证测试报告
+│   └── refactor_report.md           # 代码重构报告
 ├── assets/                          # 资源文件
 │   ├── fall.mp4                     # 跌倒检测测试视频
 │   ├── running.mp4                  # 奔跑检测测试视频
@@ -96,6 +99,7 @@ crowd-abnormal-behavior-detection/
 │       ├── running_demo.gif
 │       └── intrusion_demo.gif
 └── outputs/                         # 本地运行结果（不入库）
+    └── .gitkeep                     # 占位文件保证目录可见
 ```
 
 ---
@@ -114,13 +118,13 @@ pip install -r requirements.txt
 
 | 包 | 用途 |
 |---|---|
-| `ultralytics>=8.4.0` | YOLO 推理 + 跟踪 |
-| `opencv-python>=4.6.0` | 视频读写 + 可视化 |
-| `numpy>=1.23.0` | 数组运算 |
-| `torch>=1.8.0` | PyTorch 后端 |
-| `shapely>=2.0.0` | 多边形精确判断（可选，禁入区域检测有 fallback） |
-| `psutil>=5.8.0` | 系统信息检查 |
-| `matplotlib>=3.3.0` | 论文配图绘制 |
+| `ultralytics>=8.4.65` | YOLO 推理 + 跟踪 |
+| `opencv-python>=4.13.0` | 视频读写 + 可视化 |
+| `numpy>=2.4.4` | 数组运算 |
+| `torch>=2.12.0` | PyTorch 后端 |
+| `shapely>=2.1.2` | 多边形精确判断（可选，禁入区域检测有 fallback） |
+| `psutil>=7.2.2` | 系统信息检查 |
+| `matplotlib>=3.10.9` | 论文配图绘制 |
 
 ---
 
@@ -211,9 +215,10 @@ python scripts/intrusion_detection.py --source <video_path> --zone configs/forbi
 ## 注意事项
 
 1. **本仓库不包含**：数据集、权重文件（.pt）、训练结果
-2. 如果不使用 `assets/` 下的示例视频，用户需自行准备输入视频，通过 `--source` 参数传入
-3. 禁入区域的坐标需根据实际视频分辨率通过 `tools/zone_selector.py` 标定
-4. 权重文件放入 `weights/` 目录后即可使用（该目录已被 `.gitignore` 忽略）
+2. `assets/` 目录下已提供三个测试视频，可直接用于快速体验
+3. 如果不使用 `assets/` 下的示例视频，用户需自行准备输入视频，通过 `--source` 参数传入
+4. 禁入区域的坐标需根据实际视频分辨率通过 `tools/zone_selector.py` 标定
+5. 权重文件放入 `weights/` 目录后即可使用（该目录已被 `.gitignore` 忽略）
 
 ---
 
