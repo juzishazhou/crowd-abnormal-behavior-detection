@@ -34,12 +34,20 @@ import argparse
 import cv2
 import json
 import numpy as np
+import sys
 import time
 from collections import defaultdict
 from pathlib import Path
 from typing import Dict, List, Tuple, Optional
 
+# Ensure project root is on sys.path for _common import
+_project_root = Path(__file__).resolve().parent.parent
+if str(_project_root) not in sys.path:
+    sys.path.insert(0, str(_project_root))
+
 from ultralytics import YOLO
+
+from _common import PROJECT_ROOT
 
 try:
     from shapely.geometry import Point, Polygon
@@ -50,15 +58,8 @@ except ImportError:
     print("    建议安装: pip install shapely")
 
 # ============================================================
-# 项目根目录
+# 配置参数
 # ============================================================
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
-
-# ============================================================================
-# [可配置参数] — 所有可调参数集中在此
-# ============================================================================
-
-# --- 模型参数 ---
 MODEL_PATH = "yolov8n.pt"          # YOLOv8 模型权重路径 (n/s/m/l/x)
 DETECTION_CONF = 0.35              # 检测置信度阈值 (只保留高于此值的检测)
 PERSON_CLASS_ID = 0                # 行人类别 ID (COCO 数据集中 person=0)

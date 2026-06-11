@@ -17,18 +17,30 @@ Usage:
 import argparse
 import json
 import sys
-from collections import defaultdict, deque
 from pathlib import Path
+from collections import defaultdict, deque
+
+# Ensure project root is on sys.path for _common import
+_project_root = Path(__file__).resolve().parent.parent
+if str(_project_root) not in sys.path:
+    sys.path.insert(0, str(_project_root))
 
 import cv2
 import numpy as np
 import torch
 from ultralytics import YOLO
 
-# ============================================================
-# 项目根目录
-# ============================================================
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
+from _common import (
+    PROJECT_ROOT,
+    open_video,
+    get_video_props,
+    create_video_writer,
+    extract_track_ids,
+    resolve_tracker,
+    show_frame,
+    extract_event_keyframes,
+    cleanup_resources,
+)
 
 # ============================================================
 # 配置参数
@@ -315,41 +327,7 @@ def draw_normal_box(frame, tid, bbox):
                 FONT, font_scale, (0, 0, 0), font_thick, cv2.LINE_AA)
 
 
-# ============================================================
-# 关键帧自动抽取
-# ============================================================
-def extract_running_keyframes(video_path, alert_frames, output_dir, range_frames=10, step=2):
-    """从输出视频中以首个告警帧为中心抽取关键帧。"""
-    video_path = Path(video_path)
-    output_dir = Path(output_dir)
-    output_dir.mkdir(parents=True, exist_ok=True)
-
-    if not video_path.exists():
-        print(f"[X] 关键帧抽取失败: 视频不存在 {video_path}")
-        return []
-
-    cap = cv2.VideoCapture(str(video_path))
-    total = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-    first_alert = min(alert_frames)
-    start = max(0, first_alert - range_frames)
-    end = min(total - 1, first_alert + range_frames)
-
-    print(f"\n[关键帧抽取] 首个告警帧 #{first_alert}, 范围 [{start}, {end}], 步长 {step}")
-    extracted = []
-    for fn in range(start, end + 1, step):
-        cap.set(cv2.CAP_PROP_POS_FRAMES, fn)
-        ret, frame = cap.read()
-        if not ret:
-            print(f"  警告: 无法读取帧 #{fn}")
-            continue
-        out_path = output_dir / f"running_{fn:04d}.png"
-        cv2.imwrite(str(out_path), frame)
-        extracted.append(out_path)
-        print(f"  已保存: {out_path.name}")
-
-    cap.release()
-    print(f"[关键帧抽取] 完成, 共 {len(extracted)} 张 → {output_dir}/")
-    return extracted
+# 关键帧抽取通过 extract_event_keyframes 实现（已从 _common 导入）
 
 
 # ============================================================
@@ -397,13 +375,7 @@ def main():
         sys.exit(1)
 
     # Fix 3: 检查 tracker 配置文件是否存在，fallback 到内置
-    tracker_yaml = args.tracker
-    tracker_path = Path(tracker_yaml)
-    if tracker_path.exists():
-        print(f"[i] 追踪器配置: {tracker_yaml} (自定义)")
-    else:
-        print(f"[i] 追踪器配置 '{tracker_yaml}' 不存在，回退到内置 bytetrack.yaml")
-        tracker_yaml = "bytetrack.yaml"
+    tracker_yaml = resolve_tracker(args.tracker)
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
     half = (device == "cuda")
@@ -420,23 +392,13 @@ def main():
         print(f"[X] 模型加载失败: {e}")
         sys.exit(1)
 
-    cap = cv2.VideoCapture(str(VIDEO_INPUT))
-    if not cap.isOpened():
-        print(f"[X] 无法打开视频: {VIDEO_INPUT}")
-        sys.exit(1)
-
-    fps = cap.get(cv2.CAP_PROP_FPS)
-    frame_w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-    frame_h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-    total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    cap = open_video(str(VIDEO_INPUT))
+    props = get_video_props(cap)
+    fps, frame_w, frame_h, total_frames = (props["fps"], props["width"],
+                                            props["height"], props["total_frames"])
     print(f"[i] 视频信息: {frame_w}x{frame_h}, {fps:.1f} FPS, {total_frames} 帧")
 
-    fourcc = getattr(cv2, 'VideoWriter_fourcc')(*"mp4v")
-    out = cv2.VideoWriter(str(VIDEO_OUTPUT), fourcc, fps, (frame_w, frame_h))
-    if not out.isOpened():
-        print(f"[X] 无法创建输出视频: {VIDEO_OUTPUT}")
-        cap.release()
-        sys.exit(1)
+    out = create_video_writer(str(VIDEO_OUTPUT), fps, (frame_w, frame_h))
 
     frame_idx = 0
     alert_frames = []
@@ -558,17 +520,11 @@ def main():
             print(f"\n  [STATS] frame={frame_idx} active={len(active_ids)}, "
                   f"conf 分布: >=0.7:{high}  0.5-0.7:{mid}  <0.5:{low}")
 
-        try:
-            cv2.imshow("Running Detection (press Q to quit)", frame)
-            if cv2.waitKey(1) & 0xFF == ord("q"):
-                print("\n[!] 用户提前终止。")
-                break
-        except cv2.error:
-            pass
+        if not show_frame(frame, "Running Detection (press Q to quit)", "q"):
+            print("\n[!] 用户提前终止。")
+            break
 
-    cap.release()
-    out.release()
-    cv2.destroyAllWindows()
+    cleanup_resources(cap, out)
 
     # ---- 保存 JSON 事件日志 ----
     with open(LOG_PATH, "w", encoding="utf-8") as f:
@@ -589,7 +545,7 @@ def main():
         # ---- 自动抽取关键帧 ----
         do_extract = args.extract_keyframes and not args.no_extract_keyframes
         if do_extract:
-            extract_running_keyframes(
+            extract_event_keyframes(
                 video_path=VIDEO_OUTPUT,
                 alert_frames=alert_frames,
                 output_dir=args.keyframe_dir,
