@@ -45,8 +45,9 @@ runs/
 *.jpeg
 *.png
 
-# Allow sample test videos in assets/
+# Allow sample test videos and icon in assets/
 !assets/*.mp4
+!assets/*.png
 
 # Allow demo GIFs for README
 !assets/demo/*.gif
