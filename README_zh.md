@@ -56,6 +56,19 @@ python scripts/fall_detection.py --source assets/fall.mp4 --output outputs/fall_
 
 `assets/` 目录下已提供测试视频，权重文件首次运行时自动下载。
 
+三个检测器都可以直接用样例视频体验：
+
+```bash
+# 跌倒检测
+python scripts/fall_detection.py --source assets/fall.mp4 --output outputs/fall_demo.mp4
+
+# 奔跑检测
+python scripts/running_detection.py --source assets/running.mp4 --output outputs/running_demo.mp4
+
+# 禁入区域检测（使用内置示例区域）
+python scripts/intrusion_detection.py --source assets/intrusion.mp4 --output outputs/intrusion_demo.mp4
+```
+
 ---
 
 ## 项目结构
@@ -174,8 +187,9 @@ python scripts/running_detection.py --source <video_path> --output outputs/runni
 
 - 模型：自动使用 `weights/yolov8s.pt`（目标检测）
 - 追踪器：`configs/bytetrack.yaml`
-- 日志：`outputs/running_events.json`
+- 日志：`outputs/running_events.json`（JSON 事件日志，含置信度分数）
 - 灵敏度调节：`--conf-trigger 0.40`（降低阈值更多检测，提高阈值减少误检）
+- 快速体验：`python scripts/running_detection.py --source assets/running.mp4`
 
 ### 禁入区域入侵检测
 
@@ -192,6 +206,19 @@ python scripts/intrusion_detection.py --source <video_path> --zone configs/forbi
 如果不指定 `--zone`，脚本使用内置示例多边形（适用于 1280×720 视频中央区域）。
 
 详细参数说明见 [docs/USAGE.md](docs/USAGE.md)。
+
+---
+
+## 性能参考
+
+以下数据在 NVIDIA GeForce RTX 3050（4 GB）、CUDA 12.6、PyTorch 2.12.0 环境下测得：
+
+| 测试项 | 分辨率 | FPS | 模型 |
+|------|--------|-----|------|
+| 纯检测（跌倒视频） | 720×1280 | **26.6** | YOLOv8n-pose |
+| 完整流水线（奔跑视频） | 632×480 | **71.5** | YOLOv8s |
+
+基准测试工具：`tools/measure_fps.py` 和 `tools/measure_pipeline.py`。
 
 ---
 

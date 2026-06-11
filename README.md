@@ -56,6 +56,19 @@ python scripts/fall_detection.py --source assets/fall.mp4 --output outputs/fall_
 
 Sample videos are provided in `assets/`. Weights are downloaded automatically on first run.
 
+Try all three detectors with the sample videos:
+
+```bash
+# Fall detection
+python scripts/fall_detection.py --source assets/fall.mp4 --output outputs/fall_demo.mp4
+
+# Running detection
+python scripts/running_detection.py --source assets/running.mp4 --output outputs/running_demo.mp4
+
+# Intrusion detection (with built-in example zone)
+python scripts/intrusion_detection.py --source assets/intrusion.mp4 --output outputs/intrusion_demo.mp4
+```
+
 ---
 
 ## Project Structure
@@ -173,8 +186,9 @@ python scripts/running_detection.py --source <video_path> --output outputs/runni
 
 - Model: auto-uses `weights/yolov8s.pt` (object detection)
 - Tracker: `configs/bytetrack.yaml`
-- Logs: `outputs/running_events.json`
+- Logs: `outputs/running_events.json` (JSON event log with confidence scores)
 - Sensitivity: `--conf-trigger 0.40` (lower = more detections, higher = fewer false positives)
+- Quick test: `python scripts/running_detection.py --source assets/running.mp4`
 
 ### Forbidden Zone Intrusion Detection
 
@@ -191,6 +205,19 @@ python scripts/intrusion_detection.py --source <video_path> --zone configs/forbi
 If `--zone` is omitted, a built-in example polygon (suitable for 1280×720 center area) is used.
 
 See [docs/USAGE.md](docs/USAGE.md) for full parameter details.
+
+---
+
+## Performance
+
+Benchmark results measured on a laptop with NVIDIA GeForce RTX 3050 (4 GB), CUDA 12.6, PyTorch 2.12.0:
+
+| Test | Resolution | FPS | Model |
+|------|-----------|-----|-------|
+| Detection-only (fall video) | 720×1280 | **26.6** | YOLOv8n-pose |
+| Full pipeline (running video) | 632×480 | **71.5** | YOLOv8s |
+
+Benchmark tools: `tools/measure_fps.py` and `tools/measure_pipeline.py`.
 
 ---
 
