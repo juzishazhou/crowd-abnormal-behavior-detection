@@ -100,9 +100,7 @@ crowd-abnormal-behavior-detection/
 │   ├── measure_tracking.py          # 跟踪性能测量
 │   └── run_eval.py                  # 模型评估
 ├── docs/                            # 文档
-│   ├── USAGE.md                     # 详细使用说明
-│   ├── test_report.md               # 环境验证测试报告
-│   └── refactor_report.md           # 代码重构报告
+│   └── USAGE.md                     # 详细使用说明
 ├── assets/                          # 资源文件
 │   ├── fall.mp4                     # 跌倒检测测试视频
 │   ├── running.mp4                  # 奔跑检测测试视频

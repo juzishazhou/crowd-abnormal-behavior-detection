@@ -100,9 +100,7 @@ crowd-abnormal-behavior-detection/
 │   ├── measure_tracking.py          # Tracking performance benchmark
 │   └── run_eval.py                  # Model evaluation
 ├── docs/                            # Documentation
-│   ├── USAGE.md                     # Detailed usage guide
-│   ├── test_report.md               # Environment verification report
-│   └── refactor_report.md           # Code quality refactoring report
+│   └── USAGE.md                     # Detailed usage guide
 ├── assets/                          # Static assets
 │   ├── fall.mp4                     # Fall detection sample video
 │   ├── running.mp4                  # Running detection sample video

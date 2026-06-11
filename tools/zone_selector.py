@@ -184,7 +184,7 @@ class ZoneSelector:
         total_pts = sum(len(z["points"]) for z in valid_zones)
         print(f"[Save] {len(valid_zones)} zones ({total_pts} vertices) -> {self.output_path}")
         for z in valid_zones:
-            print(f"  {z['zone_name']}: {z['polygon']}")
+            print(f"  {z['name']}: {z['points']}")
         return True
 
     def run(self):
