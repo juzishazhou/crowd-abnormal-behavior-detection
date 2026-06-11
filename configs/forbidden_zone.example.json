@@ -1,0 +1,24 @@
+{
+  "zones": [
+    {
+      "zone_name": "zone_1",
+      "polygon": [
+        [300, 200],
+        [600, 200],
+        [600, 500],
+        [300, 500]
+      ],
+      "description": "示例区域 1 — 请用 tools/zone_selector.py 根据你的视频重新标定"
+    },
+    {
+      "zone_name": "zone_2",
+      "polygon": [
+        [700, 200],
+        [1000, 200],
+        [1000, 500],
+        [700, 500]
+      ],
+      "description": "示例区域 2 — 请用 tools/zone_selector.py 根据你的视频重新标定"
+    }
+  ]
+}

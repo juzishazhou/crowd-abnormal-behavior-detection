@@ -1,0 +1,12 @@
+# Ultralytics 🚀 AGPL-3.0 License - https://ultralytics.com/license
+
+# 跌倒检测专用 ByteTrack 配置
+# 降低匹配阈值、增大缓冲，防止跌倒时人体丢失追踪
+
+tracker_type: bytetrack
+track_high_thresh: 0.35     # 第一轮匹配阈值（稍提高以过滤误检，结合低 conf 推理）
+track_low_thresh: 0.05      # 第二轮低分匹配阈值（大幅降低，捕捉跌倒后姿态扭曲的低分检出）
+new_track_thresh: 0.25      # 新建轨迹的最低置信度
+track_buffer: 60            # 丢失后保留帧数（增大，防止跌倒形变导致短暂丢失后 ID 漂移）
+match_thresh: 0.7           # 关联 IoU 阈值（略微降低，容忍跌倒时框形变）
+fuse_score: True            # 融合检测分数与运动信息
