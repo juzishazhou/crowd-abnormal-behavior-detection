@@ -14,7 +14,6 @@ Note: This is an advanced tool that requires a YOLO-format dataset and a trained
 import argparse
 import os
 import sys
-from pathlib import Path
 
 from ultralytics import YOLO
 
@@ -42,8 +41,6 @@ def main():
     parser.add_argument("--name", type=str, default="eval",
                         help="评估运行名称 (默认: eval)")
     args = parser.parse_args()
-
-    PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
     if not os.path.exists(args.weights):
         print(f"[X] 权重文件不存在: {args.weights}")
@@ -75,7 +72,7 @@ def main():
     map50 = metrics.box.map50
     map50_95 = metrics.box.map
 
-    print(f"\n  Overall Results:")
+    print("\n  Overall Results:")
     print(f"    mAP50:     {map50:.4f}")
     print(f"    mAP50-95:  {map50_95:.4f}")
     print(f"    Precision: {mp:.4f}")
@@ -83,7 +80,7 @@ def main():
 
     # Per-class breakdown
     if len(metrics.box.ap_class_index) >= 1:
-        print(f"\n  Per-class results:")
+        print("\n  Per-class results:")
         for idx, cls_id in enumerate(metrics.box.ap_class_index):
             cls_name = model.names.get(cls_id, f"class_{cls_id}")
             print(f"    {cls_name:12s}  P={metrics.box.p[idx]:.4f}  R={metrics.box.r[idx]:.4f}  "

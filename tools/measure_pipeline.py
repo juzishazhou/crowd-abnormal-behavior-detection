@@ -127,7 +127,7 @@ def main():
         xyxy = sample_boxes.copy()
         w = xyxy[:, 2] - xyxy[:, 0]
         h = xyxy[:, 3] - xyxy[:, 1]
-        areas = w * h
+        _ = w * h  # benchmark: measure vectorized compute
         aspects = w / (h + 1e-6)
         cx = (xyxy[:, 0] + xyxy[:, 2]) * 0.5
         cy = (xyxy[:, 1] + xyxy[:, 3]) * 0.5
@@ -207,7 +207,7 @@ def main():
     print(f"可视化渲染:     {visualization_ms:.2f} ms")
     total = (decode_ms + preprocess_ms + inference_ms + postprocess_ms +
              feature_ms + rule_ms + visualization_ms)
-    print(f"───────────────────────")
+    print("───────────────────────")
     print(f"总计:           {total:.2f} ms ({1000/total:.1f} FPS)")
 
 

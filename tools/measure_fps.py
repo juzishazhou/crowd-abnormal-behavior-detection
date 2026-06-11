@@ -70,7 +70,7 @@ def main():
     print(f"处理帧数: {len(times)}")
     print(f"图片尺寸: {img_w}x{img_h}")
     print()
-    print(f"=== 检测 FPS ===")
+    print("=== 检测 FPS ===")
     print(f"平均耗时: {avg_ms:.1f} ms/帧")
     print(f"检测 FPS: {fps:.1f}")
 

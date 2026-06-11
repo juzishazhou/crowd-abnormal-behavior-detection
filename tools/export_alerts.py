@@ -16,11 +16,9 @@ Note: This is an advanced tool that requires YOLO weights.
 
 import argparse
 import json
-import sys
-import time
 from collections import defaultdict
 from pathlib import Path
-from typing import Dict, List, Tuple
+from typing import List
 
 import cv2
 import numpy as np
