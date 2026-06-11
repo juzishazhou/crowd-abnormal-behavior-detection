@@ -527,8 +527,16 @@ def main():
     cleanup_resources(cap, out)
 
     # ---- 保存 JSON 事件日志 ----
+    class _NumpyEncoder(json.JSONEncoder):
+        def default(self, obj):
+            if isinstance(obj, (np.floating,)):
+                return float(obj)
+            if isinstance(obj, (np.integer,)):
+                return int(obj)
+            return super().default(obj)
+
     with open(LOG_PATH, "w", encoding="utf-8") as f:
-        json.dump(events_log, f, indent=2, ensure_ascii=False)
+        json.dump(events_log, f, indent=2, ensure_ascii=False, cls=_NumpyEncoder)
 
     # ---- 汇总输出 ----
     print("\n\n[OK] 处理完成！")
