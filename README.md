@@ -16,8 +16,33 @@
 </p>
 
 <p align="center">
-  <a href="README.md">English</a> · <a href="README_zh.md">简体中文</a> · <a href="docs/USAGE.md">Usage Docs</a> · <a href="https://github.com/juzishazhou/crowd-abnormal-behavior-detection/issues">Report Bug</a>
+  <a href="README.md">🌐 English</a> · <a href="README_zh.md">🇨🇳 简体中文</a> · <a href="docs/USAGE.md">📖 Usage Docs</a> · <a href="https://github.com/juzishazhou/crowd-abnormal-behavior-detection/issues">🐞 Report Bug</a>
 </p>
+
+---
+
+<div align="left" style="margin: 20px 0;">
+
+<details>
+<summary><strong>📑 Table of Contents / 目录</strong></summary>
+
+  **[Features](#features)**  
+  **[Demo](#demo)**  
+  **[Quick Start](#quick-start)**  
+  **[Project Structure](#project-structure)**  
+  **[Installation](#installation)**  
+  **[Weights](#weights)**  
+  **[Usage](#usage)**  
+  **[Performance](#performance)**  
+  **[Utility Tools](#utility-tools)**  
+  **[Notes](#notes)**  
+  **[Contributing](#-contributing)**  
+  **[License](#license)**  
+  **[Acknowledgements](#acknowledgements)**  
+
+</details>
+
+</div>
 
 ---
 
@@ -184,6 +209,8 @@ All scripts are run from the project root.
 python scripts/fall_detection.py --source <video_path> --output outputs/fall_demo.mp4
 ```
 
+> *Expected: The output video will highlight falling persons with bounding boxes and alert labels, and optionally extract keyframes for further analysis.*
+
 - Model: auto-uses `weights/yolov8n-pose.pt` (pose estimation)
 - Tracker: `configs/bytetrack_fall.yaml`
 - Optional: `--extract-keyframes` to extract fall keyframes
@@ -193,6 +220,8 @@ python scripts/fall_detection.py --source <video_path> --output outputs/fall_dem
 ```bash
 python scripts/running_detection.py --source <video_path> --output outputs/running_demo.mp4
 ```
+
+> *Expected: Fast-moving individuals will be highlighted in the output video with speed annotations, and all running events are logged to `outputs/running_events.json`.*
 
 - Model: auto-uses `weights/yolov8s.pt` (object detection)
 - Tracker: `configs/bytetrack.yaml`
@@ -212,6 +241,8 @@ python tools/zone_selector.py --source <video_path> --output configs/forbidden_z
 python scripts/intrusion_detection.py --source <video_path> --zone configs/forbidden_zone.json --output outputs/intrusion_demo.mp4
 ```
 
+> *Expected: The output video will display visual alerts when a person's foot center or trajectory enters the configured forbidden zone.*
+
 If `--zone` is omitted, a built-in example polygon (suitable for 1280×720 center area) is used.
 
 See [docs/USAGE.md](docs/USAGE.md) for full parameter details.
@@ -228,6 +259,8 @@ Benchmark results measured on a laptop with NVIDIA GeForce RTX 3050 (4 GB), CUDA
 | Full pipeline (running video) | 632×480 | **71.5** | YOLOv8s |
 
 Benchmark tools: `tools/measure_fps.py` and `tools/measure_pipeline.py`.
+
+> ✅ **Real-time ready** — The full pipeline achieves **26–71 FPS** on an RTX 3050 (4 GB), sufficient for real-time video surveillance analysis without frame dropping.
 
 ---
 
@@ -255,6 +288,18 @@ Benchmark tools: `tools/measure_fps.py` and `tools/measure_pipeline.py`.
 3. Provide your own input videos via `--source` when testing with custom footage
 4. Forbidden zone coordinates should be calibrated via `tools/zone_selector.py` for your specific video resolution
 5. Place weight files in `weights/` to use them (this directory is gitignored)
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Whether you'd like to report a bug, suggest a feature, or submit a pull request, your help makes this project better.
+
+- **Found a bug?** [Open an issue](https://github.com/juzishazhou/crowd-abnormal-behavior-detection/issues)
+- **Want a feature?** Start a discussion in the issues section
+- **Submit code?** Fork the repo, create a feature branch, and send a PR
+
+Please ensure your code follows the existing style and includes appropriate documentation.
 
 ---
 
