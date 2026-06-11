@@ -52,8 +52,8 @@ runs/
 !assets/demo/*.gif
 
 # Local run outputs
-output/
-outputs/
+outputs/*
+!outputs/.gitkeep
 
 # Datasets
 datasets/

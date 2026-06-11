@@ -1,202 +1,226 @@
-# 密集人群背景下人体异常行为检测算法
+**English** | [简体中文](README_zh.md)
 
-> Crowd Abnormal Behavior Detection Based on Ultralytics YOLO
+# Crowd Abnormal Behavior Detection
 
-基于 [Ultralytics YOLO](https://github.com/ultralytics/ultralytics) 的毕业设计项目，支持三类人体异常行为检测：
+[![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL--3.0-blue.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/Python-3.8%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![Ultralytics](https://img.shields.io/badge/Ultralytics-8.4%2B-0F172A?logo=ultralytics)](https://github.com/ultralytics/ultralytics)
+[![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux-lightgrey)](https://github.com/juzishazhou/crowd-abnormal-behavior-detection)
+[![Last Commit](https://img.shields.io/github/last-commit/juzishazhou/crowd-abnormal-behavior-detection)](https://github.com/juzishazhou/crowd-abnormal-behavior-detection/commits/main)
+[![Stars](https://img.shields.io/github/stars/juzishazhou/crowd-abnormal-behavior-detection?style=social)](https://github.com/juzishazhou/crowd-abnormal-behavior-detection)
 
-1. **跌倒检测** — 姿态估计 + ByteTrack 跟踪 + 轨迹分析 + 时序平滑
-2. **奔跑检测** — 目标检测 + ByteTrack 跟踪 + 像素速度阈值
-3. **禁入区域入侵检测** — 多边形区域配置 + 脚底中心点/轨迹判定
+> Real-time human abnormal behavior detection in crowded scenes — powered by Ultralytics YOLO and ByteTrack.
+
+A graduation project that detects three categories of human abnormal behavior from video streams:
+
+- **Fall Detection** — pose estimation + ByteTrack tracking + trajectory analysis + temporal smoothing
+- **Running Detection** — object detection + ByteTrack tracking + pixel-velocity thresholding
+- **Intrusion Detection** — polygon zone configuration + foot-center / trajectory judgment
 
 ---
 
-## 效果演示
+## Features
 
-### 跌倒检测
+### 🧠 Fall Detection
+Detects human falls using YOLOv8-pose for keypoint extraction, ByteTrack for multi-object tracking, and trajectory-based temporal analysis with smoothing to suppress false positives.
+
+### 🏃 Running Detection
+Identifies individuals moving at abnormally high speeds using YOLO object detection combined with ByteTrack tracking and pixel-velocity computation against a configurable threshold.
+
+### 🚫 Intrusion Detection
+Monitors user-defined polygonal forbidden zones and triggers alerts when a person's foot center or trajectory enters the restricted area. Supports interactive zone calibration via `tools/zone_selector.py`.
+
+---
+
+## Demo
+
+### Fall Detection
 ![fall detection demo](assets/demo/fall_demo.gif)
 
-### 奔跑检测
+### Running Detection
 ![running detection demo](assets/demo/running_demo.gif)
 
-### 禁入区域检测
+### Intrusion Detection
 ![intrusion detection demo](assets/demo/intrusion_demo.gif)
 
 ---
 
-## 项目结构
+## Quick Start
+
+```bash
+git clone https://github.com/juzishazhou/crowd-abnormal-behavior-detection.git
+cd crowd-abnormal-behavior-detection
+pip install -r requirements.txt
+python scripts/fall_detection.py --source assets/fall.mp4 --output outputs/fall_demo.mp4
+```
+
+Sample videos are provided in `assets/`. Weights are downloaded automatically on first run.
+
+---
+
+## Project Structure
 
 ```
 crowd-abnormal-behavior-detection/
 ├── README.md
+├── README_zh.md
 ├── LICENSE
 ├── requirements.txt
 ├── .gitignore
 ├── CITATION.cff
-├── scripts/                         # 主检测脚本
-│   ├── fall_detection.py            # 跌倒检测
-│   ├── running_detection.py         # 奔跑检测
-│   └── intrusion_detection.py       # 禁入区域入侵检测
-├── configs/                         # 配置文件
-│   ├── bytetrack_fall.yaml          # ByteTrack 跌倒检测配置
-│   ├── bytetrack.yaml               # ByteTrack 奔跑检测配置
-│   └── forbidden_zone.example.json  # 禁入区域示例配置
-├── tools/                           # 辅助工具
-│   ├── check_env.py                 # 环境检查
-│   ├── zone_selector.py             # 禁入区域交互式标定
-│   ├── export_alerts.py             # 告警导出
-│   ├── frame_viewer.py              # 视频帧查看器
-│   ├── measure_fps.py               # FPS 测量
-│   ├── measure_pipeline.py          # 流水线延迟测量
-│   ├── measure_tracking.py          # 跟踪性能测量
-│   └── run_eval.py                  # 模型评估
-├── docs/                            # 文档
-│   └── USAGE.md                     # 使用说明
-├── assets/                          # 资源文件
-│   ├── fall.mp4                     # 跌倒检测测试视频
-│   ├── running.mp4                  # 奔跑检测测试视频
-│   ├── intrusion.mp4                # 禁入区域测试视频
-│   └── demo/                        # 效果演示 GIF
+├── scripts/                         # Core detection scripts
+│   ├── fall_detection.py            # Fall detection
+│   ├── running_detection.py         # Running detection
+│   └── intrusion_detection.py       # Forbidden zone intrusion detection
+├── configs/                         # Configuration files
+│   ├── bytetrack_fall.yaml          # ByteTrack config for fall detection
+│   ├── bytetrack.yaml               # ByteTrack config for running detection
+│   └── forbidden_zone.example.json  # Example forbidden zone polygon
+├── tools/                           # Utility tools
+│   ├── check_env.py                 # Environment checker
+│   ├── zone_selector.py             # Interactive zone calibration
+│   ├── export_alerts.py             # Alert export to JSON
+│   ├── frame_viewer.py              # Frame-by-frame video viewer
+│   ├── measure_fps.py               # FPS benchmark
+│   ├── measure_pipeline.py          # Pipeline latency benchmark
+│   ├── measure_tracking.py          # Tracking performance benchmark
+│   └── run_eval.py                  # Model evaluation
+├── docs/                            # Documentation
+│   └── USAGE.md                     # Detailed usage guide
+├── assets/                          # Static assets
+│   ├── fall.mp4                     # Fall detection sample video
+│   ├── running.mp4                  # Running detection sample video
+│   ├── intrusion.mp4                # Intrusion detection sample video
+│   └── demo/                        # Demo GIFs for README
 │       ├── fall_demo.gif
 │       ├── running_demo.gif
 │       └── intrusion_demo.gif
-├── outputs/                         # 本地运行结果（不入库）
-└── tests/                           # 测试
-    └── test_imports.py
+└── outputs/                         # Local outputs (gitignored)
 ```
 
 ---
 
-## 环境安装
+## Installation
 
-**Python 版本**: 建议 Python 3.8+
+**Python**: 3.8 or later recommended.
 
 ```bash
-# 克隆仓库
 git clone https://github.com/juzishazhou/crowd-abnormal-behavior-detection.git
 cd crowd-abnormal-behavior-detection
-
-# 安装依赖
 pip install -r requirements.txt
 ```
 
-### 依赖清单
+### Dependencies
 
-| 包 | 用途 |
+| Package | Purpose |
 |---|---|
-| `ultralytics>=8.4.0` | YOLO 推理 + 跟踪 |
-| `opencv-python>=4.6.0` | 视频读写 + 可视化 |
-| `numpy>=1.23.0` | 数组运算 |
-| `torch>=1.8.0` | PyTorch 后端 |
-| `shapely>=2.0.0` | 多边形精确判断（可选，禁入区域检测有 fallback） |
-| `psutil>=5.8.0` | 系统信息检查 |
-| `matplotlib>=3.3.0` | 论文配图绘制 |
+| `ultralytics>=8.4.0` | YOLO inference + tracking |
+| `opencv-python>=4.6.0` | Video I/O + visualization |
+| `numpy>=1.23.0` | Numerical operations |
+| `torch>=1.8.0` | PyTorch backend |
+| `shapely>=2.0.0` | Precise polygon ops (optional; intrusion detection has fallback) |
+| `psutil>=5.8.0` | System info checks |
+| `matplotlib>=3.3.0` | Figure plotting |
 
 ---
 
-## 权重准备
+## Weights
 
-**本仓库不包含任何 `.pt` 权重文件。**
+**This repository does not include `.pt` weight files.**
 
-### 官方预训练权重
+### Official Pre-trained Weights
 
-`pip install ultralytics` 后，首次运行脚本时会自动从 Ultralytics 服务器下载所需权重（如 `yolov8n.pt`、`yolov8n-pose.pt`、`yolov8s.pt` 等）。
+After `pip install ultralytics`, weights (e.g., `yolov8n.pt`, `yolov8n-pose.pt`, `yolov8s.pt`) are downloaded automatically from Ultralytics servers on first run.
 
-你也可以手动下载放入 `weights/` 目录（此目录已加入 `.gitignore`）：
+You may also manually place them under `weights/` (this directory is gitignored):
 
 ```bash
 mkdir weights
-# 下载官方权重
-# https://github.com/ultralytics/assets/releases
+# Download from https://github.com/ultralytics/assets/releases
 ```
 
-### 微调权重
+### Fine-tuned Weights
 
-WiderPerson 数据集微调后的权重文件较大（~225 MB），暂不在仓库中提供。
+Weights fine-tuned on the WiderPerson dataset are large (~225 MB) and not included in this repo.
 
-> **TODO**: 后续通过 GitHub Release 提供下载链接。
+> **TODO**: Provide download links via GitHub Releases.
 
 ---
 
-## 使用方法
+## Usage
 
-所有脚本从项目根目录运行。
+All scripts are run from the project root.
 
-### 跌倒检测
+### Fall Detection
 
 ```bash
 python scripts/fall_detection.py --source <video_path> --output outputs/fall_demo.mp4
 ```
 
-- 模型: 自动使用 `weights/yolov8n-pose.pt`（姿态估计）
-- 追踪器: `configs/bytetrack_fall.yaml`
-- 可选参数: `--extract-keyframes` 抽取跌倒关键帧
+- Model: auto-uses `weights/yolov8n-pose.pt` (pose estimation)
+- Tracker: `configs/bytetrack_fall.yaml`
+- Optional: `--extract-keyframes` to extract fall keyframes
 
-### 奔跑检测
+### Running Detection
 
 ```bash
 python scripts/running_detection.py --source <video_path> --output outputs/running_demo.mp4
 ```
 
-- 模型: 自动使用 `weights/yolov8s.pt`（目标检测）
-- 追踪器: `configs/bytetrack.yaml`
-- 日志: `outputs/running_events.json`
-- 灵敏度调节: `--conf-trigger 0.40`（降低阈值更多检测，提高阈值减少误检）
+- Model: auto-uses `weights/yolov8s.pt` (object detection)
+- Tracker: `configs/bytetrack.yaml`
+- Logs: `outputs/running_events.json`
+- Sensitivity: `--conf-trigger 0.40` (lower = more detections, higher = fewer false positives)
 
-### 禁入区域入侵检测
+### Forbidden Zone Intrusion Detection
 
-两步流程：
+Two-step workflow:
 
 ```bash
-# 步骤 1：交互式标定禁入区域
+# Step 1: Interactive zone calibration
 python tools/zone_selector.py --source <video_path> --output configs/forbidden_zone.json
 
-# 步骤 2：运行检测
+# Step 2: Run detection
 python scripts/intrusion_detection.py --source <video_path> --zone configs/forbidden_zone.json --output outputs/intrusion_demo.mp4
 ```
 
-如果不指定 `--zone`，脚本使用内置示例多边形（适用于 1280×720 视频中央区域）。
+If `--zone` is omitted, a built-in example polygon (suitable for 1280×720 center area) is used.
 
-详细参数说明见 [docs/USAGE.md](docs/USAGE.md)。
-
----
-
-## 工具脚本说明
-
-| 工具 | 命令 | 用途 |
-|------|------|------|
-| 环境检查 | `python tools/check_env.py` | 检查 Python/PyTorch/Ultralytics 版本 |
-| 区域标定 | `python tools/zone_selector.py --source <video> --output configs/zone.json` | 交互式标定禁入区域 |
-| 告警导出 | `python tools/export_alerts.py --video <video>` | 批量导出异常告警 JSON |
-| 帧查看器 | `python tools/frame_viewer.py <video_path>` | 逐帧查看视频 |
-| FPS 测量 | `python tools/measure_fps.py --video <video> --weights <weights.pt>` | 测量纯检测 FPS |
-| 流水线延迟 | `python tools/measure_pipeline.py --video <video> --weights <weights.pt>` | 测量各阶段延迟 |
-| 跟踪性能 | `python tools/measure_tracking.py --video <video> --weights <weights.pt>` | 测量跟踪指标 |
-| 模型评估 | `python tools/run_eval.py --weights <model.pt> --data <dataset.yaml>` | 评估 mAP/PR 曲线 |
-
-> **注意**: `run_eval.py`、`export_alerts.py`、`measure_*.py` 是可选的高级工具，需要训练权重或数据集。
+See [docs/USAGE.md](docs/USAGE.md) for full parameter details.
 
 ---
 
-## 实验结果
+## Utility Tools
 
-简要实验数据记录见 [docs/experiment_results.md](docs/experiment_results.md)。
+| Tool | Command | Purpose |
+|------|---------|---------|
+| Env Check | `python tools/check_env.py` | Check Python / PyTorch / Ultralytics versions |
+| Zone Selector | `python tools/zone_selector.py --source <video> --output configs/zone.json` | Interactive forbidden zone calibration |
+| Alert Export | `python tools/export_alerts.py --video <video>` | Batch export alerts as JSON |
+| Frame Viewer | `python tools/frame_viewer.py <video_path>` | Step through video frame by frame |
+| FPS Benchmark | `python tools/measure_fps.py --video <video> --weights <weights.pt>` | Measure detection-only FPS |
+| Pipeline Latency | `python tools/measure_pipeline.py --video <video> --weights <weights.pt>` | Measure per-stage latency |
+| Tracking Benchmark | `python tools/measure_tracking.py --video <video> --weights <weights.pt>` | Measure tracking metrics |
+| Model Eval | `python tools/run_eval.py --weights <model.pt> --data <dataset.yaml>` | Evaluate mAP / PR curves |
+
+> **Note**: `run_eval.py`, `export_alerts.py`, and `measure_*.py` are optional advanced tools that require trained weights or datasets.
 
 ---
 
-## 注意事项
+## Notes
 
-1. **本仓库不包含**：数据集、权重文件（.pt）、测试视频、训练结果
-2. 用户需要自行准备输入视频，通过 `--source` 参数传入
-3. 禁入区域的坐标需根据实际视频分辨率通过 `tools/zone_selector.py` 标定
-4. 权重文件放入 `weights/` 目录后即可使用（该目录已被 `.gitignore` 忽略）
+1. **Not included**: datasets, weight files (.pt), training results
+2. Provide your own input videos via `--source` if not using the sample videos in `assets/`
+3. Forbidden zone coordinates should be calibrated via `tools/zone_selector.py` for your specific video resolution
+4. Place weight files in `weights/` to use them (this directory is gitignored)
 
 ---
 
 ## License
 
-本项目基于 [AGPL-3.0](LICENSE) 开源。
+This project is open-sourced under [AGPL-3.0](LICENSE).
 
-本项目基于 [Ultralytics YOLO](https://github.com/ultralytics/ultralytics) (AGPL-3.0) 开发，沿用其许可证。
+Built on [Ultralytics YOLO](https://github.com/ultralytics/ultralytics) (AGPL-3.0), and carries forward its license.
 
 ```
 Copyright (C) 2026 juzishazhou
@@ -204,8 +228,8 @@ Copyright (C) 2026 juzishazhou
 
 ---
 
-## 致谢
+## Acknowledgements
 
-- [Ultralytics YOLO](https://github.com/ultralytics/ultralytics) — 优秀的开源目标检测框架
-- [ByteTrack](https://github.com/ifzhang/ByteTrack) — 多目标跟踪算法
-- [WiderPerson](https://github.com/ShiqiYu/WiderPerson) — 密集人群检测数据集
+- [Ultralytics YOLO](https://github.com/ultralytics/ultralytics) — State-of-the-art object detection framework
+- [ByteTrack](https://github.com/ifzhang/ByteTrack) — Multi-object tracking algorithm
+- [WiderPerson](https://github.com/ShiqiYu/WiderPerson) — Dense pedestrian detection dataset
