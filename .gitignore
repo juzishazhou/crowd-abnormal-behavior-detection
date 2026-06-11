@@ -36,9 +36,7 @@ models/
 # Training outputs
 runs/
 
-# Video / image outputs
-output/
-outputs/
+# Video / image outputs (default ignore)
 *.mp4
 *.avi
 *.mov
@@ -47,15 +45,20 @@ outputs/
 *.jpeg
 *.png
 
-# Datasets & test videos
+# Allow sample test videos in assets/
+!assets/*.mp4
+
+# Allow demo GIFs for README
+!assets/demo/*.gif
+
+# Local run outputs
+output/
+outputs/
+
+# Datasets
 datasets/
 测试视频/
 examples/
-
-# Allow assets images
-!assets/*.png
-!assets/*.jpg
-!assets/*.gif
 
 # OS
 Thumbs.db

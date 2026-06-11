@@ -10,6 +10,19 @@
 
 ---
 
+## 效果演示
+
+### 跌倒检测
+![fall detection demo](assets/demo/fall_demo.gif)
+
+### 奔跑检测
+![running detection demo](assets/demo/running_demo.gif)
+
+### 禁入区域检测
+![intrusion detection demo](assets/demo/intrusion_demo.gif)
+
+---
+
 ## 项目结构
 
 ```
@@ -22,8 +35,7 @@ crowd-abnormal-behavior-detection/
 ├── scripts/                         # 主检测脚本
 │   ├── fall_detection.py            # 跌倒检测
 │   ├── running_detection.py         # 奔跑检测
-│   ├── intrusion_detection.py       # 禁入区域入侵检测
-│   └── plot_fig4_2.py               # 论文配图生成
+│   └── intrusion_detection.py       # 禁入区域入侵检测
 ├── configs/                         # 配置文件
 │   ├── bytetrack_fall.yaml          # ByteTrack 跌倒检测配置
 │   ├── bytetrack.yaml               # ByteTrack 奔跑检测配置
@@ -38,10 +50,16 @@ crowd-abnormal-behavior-detection/
 │   ├── measure_tracking.py          # 跟踪性能测量
 │   └── run_eval.py                  # 模型评估
 ├── docs/                            # 文档
-│   ├── USAGE.md                     # 使用说明
-│   └── experiment_results.md        # 实验数据记录
+│   └── USAGE.md                     # 使用说明
 ├── assets/                          # 资源文件
-│   └── fig4_2_aspect_ratio.png      # 论文图4.2
+│   ├── fall.mp4                     # 跌倒检测测试视频
+│   ├── running.mp4                  # 奔跑检测测试视频
+│   ├── intrusion.mp4                # 禁入区域测试视频
+│   └── demo/                        # 效果演示 GIF
+│       ├── fall_demo.gif
+│       ├── running_demo.gif
+│       └── intrusion_demo.gif
+├── outputs/                         # 本地运行结果（不入库）
 └── tests/                           # 测试
     └── test_imports.py
 ```
@@ -54,7 +72,7 @@ crowd-abnormal-behavior-detection/
 
 ```bash
 # 克隆仓库
-git clone https://github.com/<your-username>/crowd-abnormal-behavior-detection.git
+git clone https://github.com/juzishazhou/crowd-abnormal-behavior-detection.git
 cd crowd-abnormal-behavior-detection
 
 # 安装依赖

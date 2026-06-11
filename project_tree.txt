@@ -1,0 +1,60 @@
+卷 Data 的文件夹 PATH 列表
+卷序列号为 00000061 68B8:9D6B
+D:.
+│  .gitignore
+│  CITATION.cff
+│  LICENSE
+│  project_tree.txt
+│  README.md
+│  requirements.txt
+│  
+├─assets
+│      fall.mp4
+│      intrusion.mp4
+│      running.mp4
+│      
+├─configs
+│      bytetrack.yaml
+│      bytetrack_fall.yaml
+│      forbidden_zone.example.json
+│      
+├─docs
+│      USAGE.md
+│      
+├─outputs
+│      fall_result.mp4
+│      intrusion_result.mp4
+│      running_result.mp4
+│      
+├─scripts
+│  │  fall_detection.py
+│  │  intrusion_detection.py
+│  │  running_detection.py
+│  │  
+│  └─__pycache__
+│          fall_detection.cpython-312.pyc
+│          intrusion_detection.cpython-312.pyc
+│          plot_fig4_2.cpython-312.pyc
+│          running_detection.cpython-312.pyc
+│          
+├─tests
+└─tools
+    │  check_env.py
+    │  export_alerts.py
+    │  frame_viewer.py
+    │  measure_fps.py
+    │  measure_pipeline.py
+    │  measure_tracking.py
+    │  run_eval.py
+    │  zone_selector.py
+    │  
+    └─__pycache__
+            check_env.cpython-312.pyc
+            export_alerts.cpython-312.pyc
+            frame_viewer.cpython-312.pyc
+            measure_fps.cpython-312.pyc
+            measure_pipeline.cpython-312.pyc
+            measure_tracking.cpython-312.pyc
+            run_eval.cpython-312.pyc
+            zone_selector.cpython-312.pyc
+            

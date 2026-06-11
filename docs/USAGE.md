@@ -94,39 +94,49 @@ python scripts/intrusion_detection.py --source <video_path> --zone configs/forbi
 
 ---
 
-## 4. 实战示例
+## 4. 快速体验（使用仓库自带测试视频）
+
+Clone 后可直接使用 `assets/` 目录下的测试视频跑通全流程：
 
 ### 4.1 跌倒检测
 
 ```bash
-# 指定输入输出 + 抽取关键帧
-python scripts/fall_detection.py --source your_video.mp4 --output outputs/fall_result.mp4 --extract-keyframes --keyframe-dir outputs/fall_keyframes
+# 使用自带测试视频
+python scripts/fall_detection.py --source assets/fall.mp4 --output outputs/fall_result.mp4 --extract-keyframes --keyframe-dir outputs/fall_keyframes
 
 # 禁用关键帧（只跑检测，更快）
-python scripts/fall_detection.py --source your_video.mp4 --no-extract-keyframes
+python scripts/fall_detection.py --source assets/fall.mp4 --no-extract-keyframes
 ```
 
 ### 4.2 奔跑检测
 
 ```bash
-# 用自己的视频 + 调整灵敏度
-python scripts/running_detection.py --source your_video.mp4 --output outputs/run_result.mp4 --conf-trigger 0.40 --log outputs/run_events.json
+# 使用自带测试视频
+python scripts/running_detection.py --source assets/running.mp4 --output outputs/running_result.mp4 --conf-trigger 0.50 --log outputs/running_events.json
 
 # 换轻量模型提速
-python scripts/running_detection.py --source your_video.mp4 --model yolov8n.pt --conf-trigger 0.35
+python scripts/running_detection.py --source assets/running.mp4 --model yolov8n.pt --conf-trigger 0.35
 ```
 
 ### 4.3 禁入区检测
 
 ```bash
 # 步骤 1：标定（只做一次）
-python tools/zone_selector.py --source your_video.mp4 --output configs/forbidden_zone.json
+python tools/zone_selector.py --source assets/intrusion.mp4 --output configs/forbidden_zone.json
 
 # 步骤 2：检测
-python scripts/intrusion_detection.py --source your_video.mp4 --zone configs/forbidden_zone.json --output outputs/intrusion_result.mp4
+python scripts/intrusion_detection.py --source assets/intrusion.mp4 --zone configs/forbidden_zone.json --output outputs/intrusion_result.mp4
 
 # 跳过 JSON：直接用示例区域跑检测
-python scripts/intrusion_detection.py --source your_video.mp4
+python scripts/intrusion_detection.py --source assets/intrusion.mp4
+```
+
+### 使用自己的视频
+
+将上述命令中的 `assets/xxx.mp4` 替换为你的视频路径即可：
+
+```bash
+python scripts/fall_detection.py --source your_video.mp4 --output outputs/fall_result.mp4
 ```
 
 ---
