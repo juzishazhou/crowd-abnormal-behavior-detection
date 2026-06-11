@@ -40,14 +40,15 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Dict, List, Tuple, Optional
 
-# Ensure project root is on sys.path for _common import
-_project_root = Path(__file__).resolve().parent.parent
-if str(_project_root) not in sys.path:
-    sys.path.insert(0, str(_project_root))
-
 from ultralytics import YOLO
 
-from _common import PROJECT_ROOT
+try:
+    from _common import PROJECT_ROOT
+except ImportError:
+    _root = Path(__file__).resolve().parent.parent
+    if str(_root) not in sys.path:
+        sys.path.insert(0, str(_root))
+    from _common import PROJECT_ROOT
 
 try:
     from shapely.geometry import Point, Polygon

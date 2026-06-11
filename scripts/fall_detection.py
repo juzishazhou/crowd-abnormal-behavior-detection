@@ -18,27 +18,37 @@ import sys
 from pathlib import Path
 from collections import defaultdict, deque
 
-# Ensure project root is on sys.path for _common import
-_project_root = Path(__file__).resolve().parent.parent
-if str(_project_root) not in sys.path:
-    sys.path.insert(0, str(_project_root))
-
 import cv2
 import numpy as np
 import torch
 from ultralytics import YOLO
 
-from _common import (
-    PROJECT_ROOT,
-    open_video,
-    get_video_props,
-    create_video_writer,
-    extract_track_ids,
-    resolve_tracker,
-    show_frame,
-    extract_event_keyframes,
-    cleanup_resources,
-)
+try:
+    from _common import (
+        PROJECT_ROOT,
+        open_video,
+        get_video_props,
+        create_video_writer,
+        extract_track_ids,
+        show_frame,
+        extract_event_keyframes,
+        cleanup_resources,
+    )
+except ImportError:
+    # Fallback when _common is not on sys.path (e.g. running script directly)
+    _root = Path(__file__).resolve().parent.parent
+    if str(_root) not in sys.path:
+        sys.path.insert(0, str(_root))
+    from _common import (
+        PROJECT_ROOT,
+        open_video,
+        get_video_props,
+        create_video_writer,
+        extract_track_ids,
+        show_frame,
+        extract_event_keyframes,
+        cleanup_resources,
+    )
 
 # ============================================================
 # 配置参数
@@ -562,10 +572,11 @@ def main():
             target_frames = fall_frames if fall_frames else suspect_frames
             extract_event_keyframes(
                 video_path=VIDEO_OUTPUT,
-                fall_frames=target_frames,
+                event_frames=target_frames,
                 output_dir=args.keyframe_dir,
                 range_frames=args.keyframe_range,
                 step=args.keyframe_step,
+                label="fall",
             )
     else:
         print("\n[!] 未检测到跌倒帧。")
