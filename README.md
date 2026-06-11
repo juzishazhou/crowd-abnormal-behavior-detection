@@ -1,13 +1,25 @@
-**English** | [简体中文](README_zh.md)
+<div align="center">
+  <img src="assets/icon.png" width="200" alt="Crowd Abnormal Behavior Detection">
+</div>
 
-# Crowd Abnormal Behavior Detection
+<h1 align="center">Crowd Abnormal Behavior Detection</h1>
 
-[![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL--3.0-blue.svg)](LICENSE)
-[![Python](https://img.shields.io/badge/Python-3.8%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
-[![Ultralytics](https://img.shields.io/badge/Ultralytics-8.4%2B-0F172A?logo=ultralytics)](https://github.com/ultralytics/ultralytics)
-[![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux-lightgrey)](https://github.com/juzishazhou/crowd-abnormal-behavior-detection)
-[![Last Commit](https://img.shields.io/github/last-commit/juzishazhou/crowd-abnormal-behavior-detection)](https://github.com/juzishazhou/crowd-abnormal-behavior-detection/commits/main)
-[![Stars](https://img.shields.io/github/stars/juzishazhou/crowd-abnormal-behavior-detection?style=social)](https://github.com/juzishazhou/crowd-abnormal-behavior-detection)
+<h3 align="center">密集人群背景下人体异常行为检测算法</h3>
+<p align="center"><strong>Intelligent behavior analysis system based on YOLOv8 &amp; ByteTrack</strong></p>
+
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-AGPL--3.0-red.svg" alt="License: AGPL-3.0"></a>
+  <a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python-3.8%2B-3776AB?logo=python&amp;logoColor=white" alt="Python 3.8+"></a>
+  <a href="https://github.com/ultralytics/ultralytics"><img src="https://img.shields.io/badge/Framework-Ultralytics%20YOLOv8-orange?logo=ultralytics" alt="Ultralytics YOLOv8"></a>
+  <a href="https://github.com/juzishazhou/crowd-abnormal-behavior-detection"><img src="https://img.shields.io/badge/Platform-Windows%20%7C%20Linux-00bcd4" alt="Platform Windows | Linux"></a>
+  <a href="https://github.com/juzishazhou/crowd-abnormal-behavior-detection/issues"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen" alt="PRs welcome"></a>
+</p>
+
+<p align="center">
+  <a href="README.md">English</a> · <a href="README_zh.md">简体中文</a> · <a href="docs/USAGE.md">Usage Docs</a> · <a href="https://github.com/juzishazhou/crowd-abnormal-behavior-detection/issues">Report Bug</a>
+</p>
+
+---
 
 > Real-time human abnormal behavior detection in crowded scenes — powered by Ultralytics YOLO and ByteTrack.
 
